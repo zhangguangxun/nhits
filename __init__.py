@@ -175,19 +175,6 @@ class NHiTS(BaseModelWithCovariates):
         else:
             output_size = sum(self.hparams.output_size)
         
-#         print("*******IMPORTANCE*****")
-#         print("self.hparams.time_varying_categoricals_encoder:",self.hparams.time_varying_categoricals_encoder)
-#         print("self.hparams.time_varying_categoricals_decoder",self.hparams.time_varying_categoricals_decoder)
-#         print("self.hparams.time_varying_reals_encoder",self.hparams.time_varying_reals_encoder)
-#         print("self.hparams.time_varying_reals_decoder",self.hparams.time_varying_reals_decoder)
-        
-        
-        # print("*********Output of customer_encoder_covariate_size**************")
-        # print(len(set(self.hparams.time_varying_reals_encoder)))
-        # print(len(set(self.target_names)))
-        # print(sum(
-        #     self.embeddings.output_size[name] for name in self.hparams.time_varying_categoricals_encoder
-        # ))
         
         self.customer_encoder_covariate_size = len(set(self.hparams.time_varying_reals_encoder)) - len(set(self.target_names)) + sum(
             self.embeddings.output_size[name] for name in self.hparams.time_varying_categoricals_encoder
@@ -196,9 +183,6 @@ class NHiTS(BaseModelWithCovariates):
             self.embeddings.output_size[name] for name in self.hparams.time_varying_categoricals_decoder
         )
         
-#         print("covariate_size :",self.covariate_size)
-#         print("encoder_covariate_size :",self.customer_encoder_covariate_size)
-#         print("decoder_covariate_size :",self.customer_decoder_covariate_size)
 
         self.model = NHiTSModule(
             context_length=self.hparams.context_length,
@@ -310,16 +294,9 @@ class NHiTS(BaseModelWithCovariates):
         else:
             x_s = None
 
-        # print("#### Encoder size is :",encoder_x_t.shape)
-        # print("#### Decoder size is :",decoder_x_t.shape)
-        # print("#### Static size is :",x_s.shape)
-        # print("#### target_positions is :",self.target_positions)
-
         # target
         encoder_y = x["encoder_cont"][..., self.target_positions]
         encoder_mask = create_mask(x["encoder_lengths"].max(), x["encoder_lengths"], inverse=True)
-        # print("#### encoder_y shape is :", encoder_y.shape)
-        # print("#### encoder_mask is :", encoder_mask)
 
         # run model
         forecast, backcast, block_forecasts, block_backcasts = self.model(
