@@ -136,9 +136,7 @@ class NHiTSBlock(nn.Module):
             + self.context_length * self.encoder_covariate_size + self.prediction_length * self.decoder_covariate_size
             + self.static_hidden_size
         ] + hidden_size
-        
-        # print("#### NHits Blocks 中的隐藏层为：",self.hidden_size)
-        
+                
         assert activation in ACTIVATIONS, f"{activation} is not in {ACTIVATIONS}"
         activ = getattr(nn, activation)()
 
@@ -193,7 +191,6 @@ class NHiTSBlock(nn.Module):
             encoder_y = torch.cat((encoder_y, x_s), 1)
 
         # Compute local projection weights and projection
-        # print("#### 输入前输入张量的维度为：",encoder_y.shape)
         theta = self.layers(encoder_y).reshape(-1, self.n_theta)
         backcast, forecast = self.basis(theta, encoder_x_t, decoder_x_t)
         backcast = backcast.reshape(-1, self.output_size, self.context_length).transpose(1, 2)
@@ -234,25 +231,6 @@ class NHiTS(nn.Module):
 
         self.prediction_length = prediction_length
         self.context_length = context_length
-        
-        # print("context_length",context_length)
-        # print("prediction_length",prediction_length)
-        # print("output_size",output_size)
-        # print("static_size",static_size)
-        # print("covariate_size",covariate_size)
-        # print("encoder_covariate_size",encoder_covariate_size)
-        # print("decoder_covariate_size",decoder_covariate_size)
-        # print("static_hidden_size",static_hidden_size)
-        # print("n_blocks",n_blocks)
-        # print("n_layers",n_layers)
-        # print("hidden_size",hidden_size)
-        # print("pooling_sizes",pooling_sizes)
-        # print("downsample_frequencies",downsample_frequencies)
-        # print("pooling_mode",pooling_mode)
-        # print("interpolation_mode",interpolation_mode)
-        # print("dropout",dropout)
-        # print("activation",activation)
-        # print("initialization",initialization)
 
         blocks = self.create_stack(
             n_blocks=n_blocks,
@@ -368,7 +346,6 @@ class NHiTS(nn.Module):
         level = encoder_y[:, -1:].repeat(1, self.prediction_length, 1)  # Level with Naive1
         block_forecasts = [level]
         block_backcasts = [encoder_y[:, -1:].repeat(1, self.context_length, 1)]
-        # block_forecasts和block_backcasts的张量设计很奇怪，取encoder_y最后一个target（T-1时刻的真实销量）重复prediction_length/context_length次得到的张量，其数值为单一数值的不断重复。
 
         forecast = level
         for block in self.blocks:
