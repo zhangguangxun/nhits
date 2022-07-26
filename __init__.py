@@ -176,10 +176,10 @@ class NHiTS(BaseModelWithCovariates):
             output_size = sum(self.hparams.output_size)
         
 #         print("*******IMPORTANCE*****")
-        print("self.hparams.time_varying_categoricals_encoder:",self.hparams.time_varying_categoricals_encoder)
-        print("self.hparams.time_varying_categoricals_decoder",self.hparams.time_varying_categoricals_decoder)
-        print("self.hparams.time_varying_reals_encoder",self.hparams.time_varying_reals_encoder)
-        print("self.hparams.time_varying_reals_decoder",self.hparams.time_varying_reals_decoder)
+#         print("self.hparams.time_varying_categoricals_encoder:",self.hparams.time_varying_categoricals_encoder)
+#         print("self.hparams.time_varying_categoricals_decoder",self.hparams.time_varying_categoricals_decoder)
+#         print("self.hparams.time_varying_reals_encoder",self.hparams.time_varying_reals_encoder)
+#         print("self.hparams.time_varying_reals_decoder",self.hparams.time_varying_reals_decoder)
         
         
         # print("*********Output of customer_encoder_covariate_size**************")
@@ -196,9 +196,9 @@ class NHiTS(BaseModelWithCovariates):
             self.embeddings.output_size[name] for name in self.hparams.time_varying_categoricals_decoder
         )
         
-        print("covariate_size :",self.covariate_size)
-        print("encoder_covariate_size :",self.customer_encoder_covariate_size)
-        print("decoder_covariate_size :",self.customer_decoder_covariate_size)
+#         print("covariate_size :",self.covariate_size)
+#         print("encoder_covariate_size :",self.customer_encoder_covariate_size)
+#         print("decoder_covariate_size :",self.customer_decoder_covariate_size)
 
         self.model = NHiTSModule(
             context_length=self.hparams.context_length,
